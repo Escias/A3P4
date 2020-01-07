@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 public class Window {
     Test test = new Test();
@@ -23,7 +24,11 @@ public class Window {
         bconnect.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                test.Test(window, login, password);
+                try {
+                    test.Test(window, login, password);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
         window.setLocationRelativeTo(null);
