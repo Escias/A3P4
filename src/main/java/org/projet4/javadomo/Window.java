@@ -11,7 +11,7 @@ public class Window {
     JFrame window = new JFrame();
     JButton bconnect = new JButton("Connect");
     JTextField login = new JTextField("Username",10);
-    JTextField password = new JTextField("Password",10);
+    JPasswordField password = new JPasswordField("Password",10);
 
     public void Window(){
         window.setTitle("Javadomo");
