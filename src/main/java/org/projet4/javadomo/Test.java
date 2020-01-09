@@ -6,10 +6,10 @@ import java.sql.SQLException;
 public class Test extends JFrame {
     ConnectSQL connectSQL = new ConnectSQL();
 
-    public void Test(JFrame window, JTextField login, JPasswordField password) throws SQLException {
+    public void Test(JFrame window, JTextField login, JPasswordField password, JPanel plog) throws SQLException {
         String log = login.getText();
         String pass = password.getText();
         window.setVisible(true);
-        connectSQL.ConnectSQL(window, log, pass);
+        connectSQL.ConnectSQL(window, log, pass, plog);
     }
 }
