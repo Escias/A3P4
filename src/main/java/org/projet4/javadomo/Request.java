@@ -1,6 +1,6 @@
 package org.projet4.javadomo;
 
-import javax.swing.*;
+import javax.swing.*  ;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -18,7 +18,12 @@ public class Request implements ActionListener{
     AmpConnect ampConnect = new AmpConnect();
     CamInstall camInstall = new CamInstall();
     DatAmp datAmp = new DatAmp();
+    DataTemp dataTemp = new DataTemp();
+    Food food = new Food();
+    Photo photo = new Photo();
     Room room = new Room();
+    Sensor sensor = new Sensor();
+    ThermoIntel thermoIntel = new ThermoIntel();
 
     public void Request(JFrame window, int id) {
         userid = id;
@@ -26,7 +31,6 @@ public class Request implements ActionListener{
         l2.add(brequest);
         c1.add(l1);
         c1.add(l2);
-//        pscroll.add(scroll);
         pscroll.add(c1);
         window.getContentPane().add(pscroll);
         Object select = scroll.getSelectedItem();
@@ -44,22 +48,46 @@ public class Request implements ActionListener{
                 int request = scroll.getSelectedIndex();
                 switch(request){
                     case 0:
-                        System.out.println("Hello");
+                        try {
+                            ampConnect.AmpConnect(windows, userid);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                     case 1:
-                        System.out.println("World");
+                        try {
+                            camInstall.CamInstall(windows, userid);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                     case 2:
-                        System.out.println("World");
+                        try {
+                            datAmp.DatAmp(windows, userid);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                     case 3:
-                        System.out.println("World");
+                        try {
+                            dataTemp.DataTemp(windows, userid);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                     case 4:
-                        System.out.println("World");
+                        try {
+                            food.Food(windows, userid);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                     case 5:
-                        System.out.println("World");
+                        try {
+                            photo.Photo(windows, userid);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                     case 6:
                         try {
@@ -69,10 +97,18 @@ public class Request implements ActionListener{
                         }
                         break;
                     case 7:
-                        System.out.println("World");
+                        try {
+                            sensor.Sensor(windows, userid);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                     case 8:
-                        System.out.println("World");
+                        try {
+                            thermoIntel.ThermoIntel(windows, userid);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                 }
             }

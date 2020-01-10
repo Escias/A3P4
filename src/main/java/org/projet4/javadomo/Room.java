@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.sql.*;
 
 public class Room {
-    private JLabel info = new JLabel();
     JPanel pscroll = new JPanel();
 
     public void Room(JFrame window, int id) throws SQLException {
@@ -14,7 +13,6 @@ public class Room {
         ResultSet rslt = stm.executeQuery(request);
         while (rslt.next()){
             pscroll.add(new JLabel("room name : "+rslt.getString(1)+" / room description :"+rslt.getString(2)));
-            pscroll.add(new JLabel("\n"));
             window.getContentPane().add(pscroll);
             window.setVisible(true);
         }
