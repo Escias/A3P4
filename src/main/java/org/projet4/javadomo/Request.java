@@ -21,6 +21,11 @@ public class Request implements ActionListener{
     CamInstall camInstall = new CamInstall();
     DatAmp datAmp = new DatAmp();
     Room room = new Room();
+    ThermoIntel thermoIntel = new ThermoIntel();
+    Sensor sensor = new Sensor();
+    DataTemp dataTemp = new DataTemp();
+    Food food = new Food();
+    Photo photo = new Photo();
 
     public void Request(JFrame window, int id, Connection co) {
         userid = id;
@@ -67,13 +72,25 @@ public class Request implements ActionListener{
                         }
                         break;
                     case 3:
-                        System.out.println("World");
+                        try {
+                            dataTemp.Datatemp(windows, userid, connect);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                     case 4:
-                        System.out.println("World");
+                        try {
+                            food.Food(windows, userid, connect);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                     case 5:
-                        System.out.println("World");
+                        try {
+                            photo.Photo(windows, userid, connect);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                     case 6:
                         try {
@@ -83,10 +100,18 @@ public class Request implements ActionListener{
                         }
                         break;
                     case 7:
-                        System.out.println("World");
+                        try {
+                            sensor.Sensor(windows, userid, connect);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                     case 8:
-                        System.out.println("World");
+                        try {
+                            thermoIntel.ThermoIntel(windows, userid, connect);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                 }
             }
