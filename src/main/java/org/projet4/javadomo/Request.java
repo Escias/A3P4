@@ -3,6 +3,7 @@ package org.projet4.javadomo;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 import java.sql.SQLException;
 
 public class Request implements ActionListener{
@@ -12,6 +13,7 @@ public class Request implements ActionListener{
     public JPanel pscroll = new JPanel();
     int userid;
     public JFrame windows;
+    Connection connect;
     Box l1 = Box.createHorizontalBox();
     Box l2 = Box.createHorizontalBox();
     Box c1 = Box.createVerticalBox();
@@ -20,13 +22,13 @@ public class Request implements ActionListener{
     DatAmp datAmp = new DatAmp();
     Room room = new Room();
 
-    public void Request(JFrame window, int id) {
+    public void Request(JFrame window, int id, Connection co) {
         userid = id;
+        connect = co;
         l1.add(scroll);
         l2.add(brequest);
         c1.add(l1);
         c1.add(l2);
-//        pscroll.add(scroll);
         pscroll.add(c1);
         window.getContentPane().add(pscroll);
         Object select = scroll.getSelectedItem();
@@ -44,13 +46,25 @@ public class Request implements ActionListener{
                 int request = scroll.getSelectedIndex();
                 switch(request){
                     case 0:
-                        System.out.println("Hello");
+                        try {
+                            ampConnect.AmpConnect(windows, userid, connect);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                     case 1:
-                        System.out.println("World");
+                        try {
+                            camInstall.CamInstall(windows, userid, connect);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                     case 2:
-                        System.out.println("World");
+                        try {
+                            datAmp.DatAmp(windows, userid, connect);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                     case 3:
                         System.out.println("World");
@@ -63,7 +77,7 @@ public class Request implements ActionListener{
                         break;
                     case 6:
                         try {
-                            room.Room(windows, userid);
+                            room.Room(windows, userid, connect);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
