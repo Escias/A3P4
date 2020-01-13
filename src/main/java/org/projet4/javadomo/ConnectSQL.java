@@ -19,7 +19,7 @@ public class ConnectSQL extends JFrame {
                 window.repaint();
                 window.setVisible(true);
                 id = rslt.getInt(1);
-                req.Request(window, id);
+                req.Request(window, id, connection);
             }
         }catch (SQLException e){
             e.printStackTrace();

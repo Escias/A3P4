@@ -12,9 +12,9 @@ public class Food {
         Statement stm = connection.createStatement();
         ResultSet rslt = stm.executeQuery(request);
         while (rslt.next()){
-            pscroll.add(new JLabel());
-            window.getContentPane().add(pscroll);
-            window.setVisible(true);
+//            pscroll.add(new JLabel());
+//            window.getContentPane().add(pscroll);
+//            window.setVisible(true);
         }
     }
 }
