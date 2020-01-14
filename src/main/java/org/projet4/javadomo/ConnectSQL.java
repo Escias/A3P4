@@ -4,13 +4,14 @@ import javax.swing.*;
 import java.sql.*;
 
 public class ConnectSQL extends JFrame {
-    Request req = new Request();
+    Menu menu = new Menu();
     int id;
+    String role;
 
     public void ConnectSQL(JFrame window, String username, String password, JPanel plog) throws SQLException {
         try {
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:8889/projet4", "root", "root");
-            String request = "SELECT user_id, user_lastname, user_firstname FROM personal_user WHERE '" + username + "' = personal_user.user_mail AND '" + password + "' = personal_user.user_password;";
+            String request = "SELECT user_id, user_type FROM personal_user WHERE '" + username + "' = personal_user.user_mail AND '" + password + "' = personal_user.user_password;";
             Statement stm = connection.createStatement();
             ResultSet rslt = stm.executeQuery(request);
             if (rslt.next()) {
@@ -19,7 +20,8 @@ public class ConnectSQL extends JFrame {
                 window.repaint();
                 window.setVisible(true);
                 id = rslt.getInt(1);
-                req.Request(window, id, connection);
+                role = rslt.getString(2);
+                menu.Menu(window, id, connection, role);
             }
         }catch (SQLException e){
             e.printStackTrace();
