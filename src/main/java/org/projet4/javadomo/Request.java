@@ -12,7 +12,6 @@ public class Request{
     private JButton brequest = new JButton("OK");
     private JButton breturn = new JButton("retour");
     public JPanel pscroll = new JPanel();
-    public JPanel getScroll = new JPanel();
     int userid;
     Connection connect;
     Box l1 = Box.createHorizontalBox();
@@ -28,7 +27,6 @@ public class Request{
     Food food = new Food();
     Photo photo = new Photo();
     PersonalUser personalUser = new PersonalUser();
-//    Menu menu = new Menu();
 
     public void Request(JFrame window, int id, Connection co, JPanel bmenu) {
         userid = id;
@@ -49,9 +47,6 @@ public class Request{
         brequest.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                window.getContentPane().remove(getScroll);
-                window.revalidate();
-                window.repaint();
                 int request = scroll.getSelectedIndex();
                 switch(request){
                     case 0:

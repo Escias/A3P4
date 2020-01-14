@@ -12,7 +12,6 @@ public class Insert {
     private JButton brequest = new JButton("OK");
     private JButton breturn = new JButton("retour");
     public JPanel pscroll = new JPanel();
-    public JPanel getScroll = new JPanel();
     Box l1 = Box.createHorizontalBox();
     Box l2 = Box.createHorizontalBox();
     Box c1 = Box.createVerticalBox();
@@ -44,9 +43,6 @@ public class Insert {
         brequest.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                window.getContentPane().remove(getScroll);
-                window.revalidate();
-                window.repaint();
                 int request = scroll.getSelectedIndex();
                 switch(request){
                     case 0:
