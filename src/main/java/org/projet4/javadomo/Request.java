@@ -6,13 +6,14 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class Request implements ActionListener{
-    private String[] request = {"Ampoule Connectée", "Caméra installée", "Donnée Ampoule", "Donnée Thermos", "Nourriture", "Photo", "Salle", "Capteur", "Thermostats"};
+public class Request{
+    private String[] request = {"Ampoule Connectée", "Caméra installée", "Donnée Ampoule", "Donnée Thermos", "Nourriture", "Photo", "Salle", "Capteur", "Thermostats", "info personnel"};
     private JComboBox scroll = new JComboBox(request);
     private JButton brequest = new JButton("OK");
+    private JButton breturn = new JButton("retour");
     public JPanel pscroll = new JPanel();
+    public JPanel getScroll = new JPanel();
     int userid;
-    public JFrame windows;
     Connection connect;
     Box l1 = Box.createHorizontalBox();
     Box l2 = Box.createHorizontalBox();
@@ -26,11 +27,18 @@ public class Request implements ActionListener{
     DataTemp dataTemp = new DataTemp();
     Food food = new Food();
     Photo photo = new Photo();
+    PersonalUser personalUser = new PersonalUser();
+//    Menu menu = new Menu();
 
-    public void Request(JFrame window, int id, Connection co) {
+    public void Request(JFrame window, int id, Connection co, JPanel bmenu) {
         userid = id;
         connect = co;
+        window.getContentPane().remove(bmenu);
+        window.revalidate();
+        window.repaint();
+        window.setVisible(true);
         l1.add(scroll);
+        l2.add(breturn);
         l2.add(brequest);
         c1.add(l1);
         c1.add(l2);
@@ -38,77 +46,80 @@ public class Request implements ActionListener{
         window.getContentPane().add(pscroll);
         Object select = scroll.getSelectedItem();
         scroll.setSelectedItem(select);
-        scroll.addActionListener(this);
-        windows =  window;
-        window.setVisible(true);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
         brequest.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                window.getContentPane().remove(getScroll);
+                window.revalidate();
+                window.repaint();
                 int request = scroll.getSelectedIndex();
                 switch(request){
                     case 0:
                         try {
-                            ampConnect.AmpConnect(windows, userid, connect);
+                            ampConnect.AmpConnect(window, userid, connect);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 1:
                         try {
-                            camInstall.CamInstall(windows, userid, connect);
+                            camInstall.CamInstall(window, userid, connect);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 2:
                         try {
-                            datAmp.DatAmp(windows, userid, connect);
+                            datAmp.DatAmp(window, userid, connect);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 3:
                         try {
-                            dataTemp.Datatemp(windows, userid, connect);
+                            dataTemp.Datatemp(window, userid, connect);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 4:
                         try {
-                            food.Food(windows, userid, connect);
+                            food.Food(window, userid, connect);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 5:
                         try {
-                            photo.Photo(windows, userid, connect);
+                            photo.Photo(window, userid, connect);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 6:
                         try {
-                            room.Room(windows, userid, connect);
+                            room.Room(window, userid, connect);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 7:
                         try {
-                            sensor.Sensor(windows, userid, connect);
+                            sensor.Sensor(window, userid, connect);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 8:
                         try {
-                            thermoIntel.ThermoIntel(windows, userid, connect);
+                            thermoIntel.ThermoIntel(window, userid, connect);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
+                        break;
+                    case 9:
+                        try {
+                            personalUser.PersonalUser(window, userid, connect);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
@@ -116,5 +127,6 @@ public class Request implements ActionListener{
                 }
             }
         });
+        window.setVisible(true);
     }
 }

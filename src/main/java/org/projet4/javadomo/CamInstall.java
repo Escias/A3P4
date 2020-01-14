@@ -1,6 +1,8 @@
 package org.projet4.javadomo;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,19 +10,27 @@ import java.sql.Statement;
 
 public class CamInstall {
     JPanel pscroll = new JPanel();
+    JTextField t1 = new JTextField(15);
+    JTextField t2 = new JTextField(15);
+    JTextField t3 = new JTextField(15);
+    JTextField t4 = new JTextField(15);
+    JTextField t5 = new JTextField(15);
+    JTextField t6 = new JTextField(15);
+    JButton binsert = new JButton("Insert");
     Box l1 = Box.createHorizontalBox();
     Box l2 = Box.createHorizontalBox();
     Box l3 = Box.createHorizontalBox();
     Box l4 = Box.createHorizontalBox();
     Box l5 = Box.createHorizontalBox();
     Box l6 = Box.createHorizontalBox();
+    Box l7 = Box.createHorizontalBox();
     Box c1 = Box.createVerticalBox();
 
     public void CamInstall(JFrame window, int id, Connection co) throws SQLException {
         String request = "SELECT cam_name, R.room_name, cam_status, cam_dist, cam_time_begin, cam_time_end " +
                 "FROM caminstall AS C " +
                 "LEFT JOIN room AS R " +
-                "ON R.room_id = C.amp_room_id " +
+                "ON R.room_id = C.cam_room_id " +
                 "WHERE R.room_user_id = " + id +
                 " ORDER BY cam_name ASC;";
         Statement stm = co.createStatement();
@@ -42,5 +52,43 @@ public class CamInstall {
             window.getContentPane().add(pscroll);
             window.setVisible(true);
         }
+    }
+
+    public void Insertion(JFrame window, Connection co){
+        l1.add(new JLabel("nom"));
+        l1.add(t1);
+        l2.add(new JLabel("salle (int)"));
+        l2.add(t2);
+        l3.add(new JLabel("état"));
+        l3.add(t3);
+        l4.add(new JLabel("distance (int)"));
+        l4.add(t4);
+        l5.add(new JLabel("date début capture"));
+        l5.add(t5);
+        l6.add(new JLabel("date fin capture"));
+        l6.add(t6);
+        l7.add(binsert);
+        c1.add(l1);
+        c1.add(l2);
+        c1.add(l3);
+        c1.add(l4);
+        c1.add(l5);
+        c1.add(l6);
+        c1.add(l7);
+        pscroll.add(c1);
+        window.getContentPane().add(pscroll);
+        binsert.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    String request = "INSERT INTO caminstall (cam_name, cam_room_id, cam_status, cam_dist, cam_time_begin, cam_time_end)" +
+                            "VALUES ('"+t1.getText()+"', '"+t2.getText()+"', '"+t3.getText()+"', '"+t4.getText()+"', '"+t5.getText()+"', '"+t6.getText()+"')";
+                    Statement stm = co.createStatement();
+                    stm.executeUpdate(request);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
     }
 }
