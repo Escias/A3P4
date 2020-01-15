@@ -21,6 +21,7 @@ public class ConnectSQL extends JFrame {
                 window.setVisible(true);
                 id = rslt.getInt(1);
                 role = rslt.getString(2);
+                System.out.println(role);
                 menu.Menu(window, id, connection, role);
             }
         }catch (SQLException e){
