@@ -16,6 +16,7 @@ public class Menu {
     JButton delete = new JButton("Delete");
     Request req = new Request();
     Insert insert = new Insert();
+    Delete del = new Delete();
 
     public void Menu(JFrame window, int id, Connection co, String role){
         l1.add(request);
@@ -43,7 +44,7 @@ public class Menu {
         delete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                del.Delete(window, co, bmenu, id, role);
             }
         });
         c1.add(l1);
