@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class Insert {
+public class Delete {
     private String[] insert = {"Ampoule Connectée", "Caméra installée", "Donnée Ampoule", "Donnée Thermos", "Nourriture", "Photo", "Salle", "Capteur", "Thermostats", "Info personel"};
     private JComboBox scroll = new JComboBox(insert);
     private JButton brequest = new JButton("OK");
@@ -26,11 +26,10 @@ public class Insert {
     Photo photo = new Photo();
     PersonalUser personalUser = new PersonalUser();
 
-    public void Insert(JFrame window, Connection co, JPanel bmenu, int id, String role) {
+    public void Delete(JFrame window, Connection co, JPanel bmenu, int id, String role) {
         window.getContentPane().remove(bmenu);
         window.revalidate();
         window.repaint();
-        window.setVisible(true);
         l1.add(scroll);
         l2.add(breturn);
         l2.add(brequest);
@@ -58,7 +57,11 @@ public class Insert {
                         dataTemp.Insertion(window, co);
                         break;
                     case 4:
-                        food.Insertion(window, co);
+                        try {
+                            food.Deleted(window, co, id);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                     case 5:
                         photo.Insertion(window, co);
@@ -81,5 +84,3 @@ public class Insert {
         window.setVisible(true);
     }
 }
-
-

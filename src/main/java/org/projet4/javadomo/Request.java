@@ -12,9 +12,6 @@ public class Request{
     private JButton brequest = new JButton("OK");
     private JButton breturn = new JButton("retour");
     public JPanel pscroll = new JPanel();
-    public JPanel getScroll = new JPanel();
-    int userid;
-    Connection connect;
     Box l1 = Box.createHorizontalBox();
     Box l2 = Box.createHorizontalBox();
     Box c1 = Box.createVerticalBox();
@@ -28,11 +25,8 @@ public class Request{
     Food food = new Food();
     Photo photo = new Photo();
     PersonalUser personalUser = new PersonalUser();
-//    Menu menu = new Menu();
 
     public void Request(JFrame window, int id, Connection co, JPanel bmenu) {
-        userid = id;
-        connect = co;
         window.getContentPane().remove(bmenu);
         window.revalidate();
         window.repaint();
@@ -49,77 +43,75 @@ public class Request{
         brequest.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                window.getContentPane().remove(getScroll);
-                window.revalidate();
-                window.repaint();
                 int request = scroll.getSelectedIndex();
                 switch(request){
                     case 0:
                         try {
-                            ampConnect.AmpConnect(window, userid, connect);
+                            ampConnect.AmpConnect(window, id, co);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 1:
                         try {
-                            camInstall.CamInstall(window, userid, connect);
+                            camInstall.CamInstall(window, id, co);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 2:
                         try {
-                            datAmp.DatAmp(window, userid, connect);
+                            datAmp.DatAmp(window, id, co);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 3:
                         try {
-                            dataTemp.Datatemp(window, userid, connect);
+                            dataTemp.Datatemp(window, id, co);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 4:
                         try {
-                            food.Food(window, userid, connect);
+//                            food.Food(window, id, co);
+                            food.Deleted(window, co, id);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 5:
                         try {
-                            photo.Photo(window, userid, connect);
+                            photo.Photo(window, id, co);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 6:
                         try {
-                            room.Room(window, userid, connect);
+                            room.Room(window, id, co);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 7:
                         try {
-                            sensor.Sensor(window, userid, connect);
+                            sensor.Sensor(window, id, co);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 8:
                         try {
-                            thermoIntel.ThermoIntel(window, userid, connect);
+                            thermoIntel.ThermoIntel(window, id, co);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 9:
                         try {
-                            personalUser.PersonalUser(window, userid, connect);
+                            personalUser.PersonalUser(window, id, co);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }

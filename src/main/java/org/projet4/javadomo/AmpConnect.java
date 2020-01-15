@@ -88,4 +88,20 @@ public class AmpConnect {
             }
         });
     }
+    int i = 0;
+    String s;
+    public void Deleted(JFrame window, Connection co, int id) throws SQLException {
+        String request = "SELECT amp_id " +
+                "FROM ampconnect AS A " +
+                "LEFT JOIN room AS R " +
+                "ON R.room_id = A.amp_room_id " +
+                "WHERE R.room_user_id = " + id +
+                " ORDER BY amp_name ASC;";
+        Statement stm = co.createStatement();
+        ResultSet rslt = stm.executeQuery(request);
+        while(rslt.next()){
+            s = rslt.getString(1);
+            System.out.println(s);
+        }
+    }
 }
