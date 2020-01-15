@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PersonalUser {
     JPanel pscroll = new JPanel();
@@ -105,5 +107,129 @@ public class PersonalUser {
         else{
             window.getContentPane().add(new JLabel("You must be an admin to add user"));
         }
+    }
+
+    int i;
+    String s;
+    String ro;
+    List<String> data = new ArrayList<>();
+    JComboBox del = new JComboBox();
+    JButton bdelete = new JButton("Delete");
+    JButton byes = new JButton("YES");
+    JButton bno = new JButton("NO");
+    JButton bme = new JButton("Delete my profile");
+    JButton bother = new JButton("Delete other profile");
+    Box d1 = Box.createHorizontalBox();
+    Box d2 = Box.createHorizontalBox();
+    Box f1 = Box.createVerticalBox();
+
+    public void Deleted(JFrame window, Connection co, int id, String role) throws SQLException {
+        if(role == "admin") {
+            d1.add(bme);
+            d1.add(bother);
+            f1.add(d1);
+            window.getContentPane().add(f1);
+            bme.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    d1.remove(bme);
+                    d1.remove(bother);
+                    f1.remove(d1);
+                    d1.add(new JLabel("Are you sure"));
+                    d2.add(byes);
+                    d2.add(bno);
+                    f1.add(d1);
+                    f1.add(d2);
+                    byes.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            String request = "DELETE FROM personal_user WHERE user_id = '" + id + "'";
+                            try {
+                                Statement stm = co.createStatement();
+                                stm.executeUpdate(request);
+                            } catch (SQLException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    });
+                    bno.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+
+                        }
+                    });
+                }
+            });
+            bother.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        i = 0;
+                        String request = "SELECT user_id, user_firstname, user_type " +
+                                "FROM personal_user " +
+                                "WHERE user_type != 'admin'" +
+                                " ORDER BY user_id ASC;";
+                        Statement stm = co.createStatement();
+                        ResultSet rslt = stm.executeQuery(request);
+                        while (rslt.next()) {
+                            s = rslt.getString(2);
+                            data.add(s);
+                            i++;
+                        }
+                    }catch (SQLException ex){
+                        ex.printStackTrace();
+                    }
+                    d1.remove(bme);
+                    d1.remove(bother);
+                    f1.remove(d1);
+                    del.setModel(new DefaultComboBoxModel(data.toArray()));
+                    d1.add(del);
+                    d2.add(bdelete);
+                    f1.add(d1);
+                    f1.add(d2);
+                    window.getContentPane().add(f1);
+                    bdelete.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            String d = String.valueOf(del.getSelectedItem());
+                            String request = "DELETE FROM personal_user WHERE user_firstname = '" + d + "'";
+                            try {
+                                Statement stm = co.createStatement();
+                                stm.executeUpdate(request);
+                            } catch (SQLException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        else{
+            d1.add(new JLabel("Do you want to delete your profile ?"));
+            d2.add(byes);
+            d2.add(bno);
+            f1.add(d1);
+            f1.add(d2);
+            window.getContentPane().add(f1);
+            byes.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String request = "DELETE FROM personal_user WHERE user_id = '" + id + "'";
+                    try {
+                        Statement stm = co.createStatement();
+                        stm.executeUpdate(request);
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+            bno.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                }
+            });
+        }
+        window.setVisible(true);
     }
 }

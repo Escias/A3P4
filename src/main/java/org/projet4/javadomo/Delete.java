@@ -45,16 +45,32 @@ public class Delete {
                 int request = scroll.getSelectedIndex();
                 switch(request){
                     case 0:
-                        ampConnect.Insertion(window, co);
+                        try {
+                            ampConnect.Deleted(window, co, id);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                     case 1:
-                        camInstall.Insertion(window, co);
+                        try {
+                            camInstall.Deleted(window, co, id);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                     case 2:
-                        datAmp.Insertion(window, co);
+                        try {
+                            datAmp.Deleted(window, co, id);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                     case 3:
-                        dataTemp.Insertion(window, co);
+                        try {
+                            dataTemp.Deleted(window, co, id);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                     case 4:
                         try {
@@ -64,19 +80,39 @@ public class Delete {
                         }
                         break;
                     case 5:
-                        photo.Insertion(window, co);
+                        try {
+                            photo.Deleted(window, co, id, role);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                     case 6:
-                        room.Insertion(window, co, id);
+                        try {
+                            room.Deleted(window, co, id);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                     case 7:
-                        sensor.Insertion(window, co);
+                        try {
+                            sensor.Deleted(window, co, id);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                     case 8:
-                        thermoIntel.Insertion(window, co);
+                        try {
+                            thermoIntel.Deleted(window, co, id);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                     case 9:
-                        personalUser.Insertion(window, co, role);
+                        try {
+                            personalUser.Deleted(window, co, id, role);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                         break;
                 }
             }

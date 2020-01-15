@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Photo {
     JPanel pscroll = new JPanel();
@@ -69,5 +71,58 @@ public class Photo {
                 }
             }
         });
+    }
+
+    int i;
+    String s;
+    List<String> data = new ArrayList<>();
+    JComboBox del = new JComboBox();
+    JButton bdelete = new JButton("Delete");
+    Box d1 = Box.createHorizontalBox();
+    Box d2 = Box.createHorizontalBox();
+    Box f1 = Box.createVerticalBox();
+
+    public void Deleted(JFrame window, Connection co, int id, String role) throws SQLException {
+        if(role == "admin") {
+            i = 0;
+            String request = "SELECT photo_id " +
+                    "FROM photo AS P " +
+                    "LEFT JOIN caminstall AS C " +
+                    "ON C.cam_id = P.photo_cam_id " +
+                    "LEFT JOIN room AS R " +
+                    "ON R.room_id = C.cam_room_id " +
+                    "WHERE R.room_user_id = " + id +
+                    " ORDER BY photo_id ASC;";
+            Statement stm = co.createStatement();
+            ResultSet rslt = stm.executeQuery(request);
+            while (rslt.next()) {
+                s = rslt.getString(1);
+                data.add(s);
+                i++;
+            }
+            del.setModel(new DefaultComboBoxModel(data.toArray()));
+            d1.add(del);
+            d2.add(bdelete);
+            f1.add(d1);
+            f1.add(d2);
+            window.getContentPane().add(f1);
+            bdelete.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String d = String.valueOf(del.getSelectedItem());
+                    String request = "DELETE FROM photo WHERE photo_id = '" + d + "'";
+                    try {
+                        Statement stm = co.createStatement();
+                        stm.executeUpdate(request);
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+        }
+        else{
+            window.getContentPane().add(new JLabel("You must be an admin to delete an image"));
+        }
+        window.setVisible(true);
     }
 }
