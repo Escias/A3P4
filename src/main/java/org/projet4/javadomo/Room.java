@@ -18,17 +18,22 @@ public class Room {
     Box l4 = Box.createHorizontalBox();
     Box c1 = Box.createVerticalBox();
     Table table = new Table();
+    JTable tab = new JTable();
+    JPanel pan = new JPanel();
 
-    public void Room(JFrame window, int id, Connection co) throws SQLException {
+    public JPanel Room(JFrame window, int id, Connection co) throws SQLException {
         String request = "SELECT room_name, room_description " +
                 "FROM room " +
                 "WHERE room_user_id = " + id +
                 " ORDER BY room_name ASC;";
         String[] t = {"name", "description"};
         table.Table(window, co, t, request);
+        tab = table.Table(window, co, t, request);
+        pan.add(tab);
+        return pan;
     }
 
-    public void Insertion(JFrame window, Connection co, int id){
+    public JPanel Insertion(JFrame window, Connection co, int id){
         l1.add(new JLabel("nom"));
         l1.add(t1);
         l3.add(new JLabel("date et heure"));
@@ -53,6 +58,7 @@ public class Room {
             }
         });
         window.setVisible(true);
+        return pscroll;
     }
 
     int i;
@@ -64,7 +70,7 @@ public class Room {
     Box d2 = Box.createHorizontalBox();
     Box f1 = Box.createVerticalBox();
 
-    public void Deleted(JFrame window, Connection co, int id) throws SQLException {
+    public JPanel Deleted(JFrame window, Connection co, int id) throws SQLException {
         i=0;
         String request = "SELECT room_id, room_name " +
                 "FROM room " +
@@ -82,7 +88,8 @@ public class Room {
         d2.add(bdelete);
         f1.add(d1);
         f1.add(d2);
-        window.getContentPane().add(f1);
+        pscroll.add(f1);
+        window.getContentPane().add(pscroll);
         bdelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -97,6 +104,7 @@ public class Room {
             }
         });
         window.setVisible(true);
+        return pscroll;
     }
 
     JTextField u1 = new JTextField(15);
@@ -108,7 +116,7 @@ public class Room {
     JButton bupdate = new JButton("Select");
     JButton bup = new JButton("Update");
 
-    public void Update(JFrame window, Connection co , int id) throws SQLException{
+    public JPanel Update(JFrame window, Connection co , int id) throws SQLException{
         i=0;
         String request = "SELECT room_id, room_name " +
                 "FROM room " +
@@ -131,9 +139,10 @@ public class Room {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String d = String.valueOf(up.getSelectedItem());
-                window.getContentPane().removeAll();
-                window.revalidate();
-                window.repaint();
+                d1.remove(up);
+                d2.remove(bupdate);
+                f1.remove(d1);
+                f1.remove(d2);
                 d1.add(new JLabel("nom"));
                 d1.add(u1);
                 d2.add(new JLabel("user (id)"));
@@ -145,7 +154,8 @@ public class Room {
                 f1.add(d2);
                 f1.add(d3);
                 f1.add(d6);
-                window.getContentPane().add(f1);
+                pscroll.add(f1);
+                window.getContentPane().add(pscroll);
                 window.setVisible(true);
                 bup.addActionListener(new ActionListener() {
                     @Override
@@ -164,5 +174,6 @@ public class Room {
             }
         });
         window.setVisible(true);
+        return pscroll;
     }
 }

@@ -25,6 +25,8 @@ public class Insert {
     Food food = new Food();
     Photo photo = new Photo();
     PersonalUser personalUser = new PersonalUser();
+    JPanel delscroll = new JPanel();
+//    Menu menu = new Menu();
 
     public void Insert(JFrame window, Connection co, JPanel bmenu, int id, String role) {
         window.getContentPane().remove(bmenu);
@@ -40,40 +42,54 @@ public class Insert {
         window.getContentPane().add(pscroll);
         Object select = scroll.getSelectedItem();
         scroll.setSelectedItem(select);
+//        breturn.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                window.getContentPane().removeAll();
+//                window.revalidate();
+//                window.repaint();
+//                window.setVisible(true);
+//                menu.Menu(window, id, co, role);
+//            }
+//        });
         brequest.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int request = scroll.getSelectedIndex();
+                window.getContentPane().remove(delscroll);
+                window.revalidate();
+                window.repaint();
+                window.setVisible(true);
                 switch(request){
                     case 0:
-                        ampConnect.Insertion(window, co);
+                        delscroll = ampConnect.Insertion(window, co);
                         break;
                     case 1:
-                        camInstall.Insertion(window, co);
+                        delscroll = camInstall.Insertion(window, co);
                         break;
                     case 2:
-                        datAmp.Insertion(window, co);
+                        delscroll = datAmp.Insertion(window, co);
                         break;
                     case 3:
-                        dataTemp.Insertion(window, co);
+                        delscroll = dataTemp.Insertion(window, co);
                         break;
                     case 4:
-                        food.Insertion(window, co);
+                        delscroll = food.Insertion(window, co);
                         break;
                     case 5:
-                        photo.Insertion(window, co);
+                        delscroll = photo.Insertion(window, co);
                         break;
                     case 6:
-                        room.Insertion(window, co, id);
+                        delscroll = room.Insertion(window, co, id);
                         break;
                     case 7:
-                        sensor.Insertion(window, co);
+                        delscroll = sensor.Insertion(window, co);
                         break;
                     case 8:
-                        thermoIntel.Insertion(window, co);
+                        delscroll = thermoIntel.Insertion(window, co);
                         break;
                     case 9:
-                        personalUser.Insertion(window, co, role);
+                        delscroll = personalUser.Insertion(window, co, role);
                         break;
                 }
             }

@@ -26,6 +26,8 @@ public class Update {
     Food food = new Food();
     Photo photo = new Photo();
     PersonalUser personalUser = new PersonalUser();
+    JPanel delscroll = new JPanel();
+//    Menu menu = new Menu();
 
     public void Update(JFrame window, Connection co, JPanel bmenu, int id, String role) {
         window.getContentPane().remove(bmenu);
@@ -40,77 +42,91 @@ public class Update {
         window.getContentPane().add(pscroll);
         Object select = scroll.getSelectedItem();
         scroll.setSelectedItem(select);
+//        breturn.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                window.getContentPane().removeAll();
+//                window.revalidate();
+//                window.repaint();
+//                window.setVisible(true);
+//                menu.Menu(window, id, co, role);
+//            }
+//        });
         brequest.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int request = scroll.getSelectedIndex();
+                window.getContentPane().remove(delscroll);
+                window.revalidate();
+                window.repaint();
+                window.setVisible(true);
                 switch(request){
                     case 0:
                         try {
-                            ampConnect.Update(window, co, id);
+                            delscroll = ampConnect.Update(window, co, id);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 1:
                         try {
-                            camInstall.Update(window, co, id);
+                            delscroll = camInstall.Update(window, co, id);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 2:
                         try {
-                            datAmp.Update(window, co, id);
+                            delscroll = datAmp.Update(window, co, id);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 3:
                         try {
-                            dataTemp.Update(window, co, id);
+                            delscroll = dataTemp.Update(window, co, id);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 4:
                         try {
-                            food.Update(window, co, id);
+                            delscroll = food.Update(window, co, id);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 5:
                         try {
-                            photo.Update(window, co, id);
+                            delscroll = photo.Update(window, co, id);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 6:
                         try {
-                            room.Update(window, co, id);
+                            delscroll = room.Update(window, co, id);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 7:
                         try {
-                            sensor.Update(window, co, id);
+                            delscroll = sensor.Update(window, co, id);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 8:
                         try {
-                            thermoIntel.Update(window, co, id);
+                            delscroll = thermoIntel.Update(window, co, id);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 9:
                         try {
-                            personalUser.Deleted(window, co, id, role);
+                            delscroll = personalUser.Deleted(window, co, id, role);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }

@@ -25,8 +25,10 @@ public class Sensor {
     Box l7 = Box.createHorizontalBox();
     Box c1 = Box.createVerticalBox();
     Table table = new Table();
+    JTable tab = new JTable();
+    JPanel pan = new JPanel();
 
-    public void Sensor(JFrame window, int id, Connection co) throws SQLException {
+    public JPanel Sensor(JFrame window, int id, Connection co) throws SQLException {
         String request = "SELECT sensor_id, sensor_name, R.room_name, sensor_status, sensor_interval, sensor_temp_min, sensor_temp_max " +
                 "FROM sensor AS S " +
                 "LEFT JOIN room AS R " +
@@ -35,9 +37,12 @@ public class Sensor {
                 " ORDER BY sensor_id ASC;";
         String[] t = {"id", "nom", "salle", "status", "interval (s)", "temp. min", "temp. max"};
         table.Table(window, co, t, request);
+        tab = table.Table(window, co, t, request);
+        pan.add(tab);
+        return pan;
     }
 
-    public void Insertion(JFrame window, Connection co){
+    public JPanel Insertion(JFrame window, Connection co){
         l1.add(new JLabel("nom"));
         l1.add(t1);
         l2.add(new JLabel("salle (int)"));
@@ -74,6 +79,7 @@ public class Sensor {
             }
         });
         window.setVisible(true);
+        return pscroll;
     }
 
     int i;
@@ -85,7 +91,7 @@ public class Sensor {
     Box d2 = Box.createHorizontalBox();
     Box f1 = Box.createVerticalBox();
 
-    public void Deleted(JFrame window, Connection co, int id) throws SQLException {
+    public JPanel Deleted(JFrame window, Connection co, int id) throws SQLException {
         i=0;
         String request = "SELECT sensor_id, sensor_name " +
                 "FROM sensor AS S " +
@@ -105,7 +111,8 @@ public class Sensor {
         d2.add(bdelete);
         f1.add(d1);
         f1.add(d2);
-        window.getContentPane().add(f1);
+        pscroll.add(f1);
+        window.getContentPane().add(pscroll);
         bdelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -120,6 +127,7 @@ public class Sensor {
             }
         });
         window.setVisible(true);
+        return pscroll;
     }
 
     JTextField u1 = new JTextField(15);
@@ -135,7 +143,7 @@ public class Sensor {
     JButton bupdate = new JButton("Select");
     JButton bup = new JButton("Update");
 
-    public void Update(JFrame window, Connection co , int id) throws SQLException{
+    public JPanel Update(JFrame window, Connection co , int id) throws SQLException{
         i=0;
         String request = "SELECT sensor_id, sensor_name " +
                 "FROM sensor AS S " +
@@ -160,9 +168,10 @@ public class Sensor {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String d = String.valueOf(up.getSelectedItem());
-                window.getContentPane().removeAll();
-                window.revalidate();
-                window.repaint();
+                d1.remove(up);
+                d2.remove(bupdate);
+                f1.remove(d1);
+                f1.remove(d2);
                 d1.add(new JLabel("salle (id)"));
                 d1.add(u1);
                 d2.add(new JLabel("état (on/off)"));
@@ -180,7 +189,8 @@ public class Sensor {
                 f1.add(d4);
                 f1.add(d5);
                 f1.add(d6);
-                window.getContentPane().add(f1);
+                pscroll.add(f1);
+                window.getContentPane().add(pscroll);
                 window.setVisible(true);
                 bup.addActionListener(new ActionListener() {
                     @Override
@@ -199,5 +209,6 @@ public class Sensor {
             }
         });
         window.setVisible(true);
+        return pscroll;
     }
 }
