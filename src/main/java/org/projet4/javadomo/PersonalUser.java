@@ -32,17 +32,22 @@ public class PersonalUser {
     Box l9 = Box.createHorizontalBox();
     Box c1 = Box.createVerticalBox();
     Table table = new Table();
+    JTable tab = new JTable();
+    JPanel pan = new JPanel();
 
-    public void PersonalUser(JFrame window, int id, Connection co) throws SQLException {
+    public JPanel PersonalUser(JFrame window, int id, Connection co) throws SQLException {
         String request = "SELECT user_lastname, user_firstname, user_mail, user_phone, user_adress, user_ZIP, user_type " +
                 "FROM personal_user " +
                 "WHERE user_id = "+id+
                 " ORDER BY user_lastname ASC;";
         String[] t = {"nom", "prénom", "mail", "téléphone", "adresse", "ZIP", "type"};
         table.Table(window, co, t, request);
+        tab = table.Table(window, co, t, request);
+        pan.add(tab);
+        return pan;
     }
 
-    public void Insertion(JFrame window, Connection co, String role){
+    public JPanel Insertion(JFrame window, Connection co, String role){
         if (role == "admin") {
             l1.add(new JLabel("nom"));
             l1.add(t1);
@@ -87,9 +92,11 @@ public class PersonalUser {
             });
         }
         else{
-            window.getContentPane().add(new JLabel("You must be an admin to add user"));
+            pscroll.add(new JLabel("You must be an admin to add user"));
+            window.getContentPane().add(pscroll);
         }
         window.setVisible(true);
+        return pscroll;
     }
 
     int i;
@@ -105,7 +112,7 @@ public class PersonalUser {
     Box d2 = Box.createHorizontalBox();
     Box f1 = Box.createVerticalBox();
 
-    public void Deleted(JFrame window, Connection co, int id, String role) throws SQLException {
+    public JPanel Deleted(JFrame window, Connection co, int id, String role) throws SQLException {
         if(role == "admin") {
             d1.add(bme);
             d1.add(bother);
@@ -122,6 +129,8 @@ public class PersonalUser {
                     d2.add(bno);
                     f1.add(d1);
                     f1.add(d2);
+                    pscroll.add(f1);
+                    window.getContentPane().add(pscroll);
                     byes.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
@@ -137,7 +146,10 @@ public class PersonalUser {
                     bno.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-
+                            window.getContentPane().remove(pscroll);
+                            window.revalidate();
+                            window.repaint();
+                            window.setVisible(true);
                         }
                     });
                 }
@@ -169,7 +181,8 @@ public class PersonalUser {
                     d2.add(bdelete);
                     f1.add(d1);
                     f1.add(d2);
-                    window.getContentPane().add(f1);
+                    pscroll.add(f1);
+                    window.getContentPane().add(pscroll);
                     bdelete.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
@@ -192,7 +205,8 @@ public class PersonalUser {
             d2.add(bno);
             f1.add(d1);
             f1.add(d2);
-            window.getContentPane().add(f1);
+            pscroll.add(f1);
+            window.getContentPane().add(pscroll);
             byes.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -213,6 +227,7 @@ public class PersonalUser {
             });
         }
         window.setVisible(true);
+        return pscroll;
     }
 
     JTextField u1 = new JTextField(15);
@@ -234,7 +249,7 @@ public class PersonalUser {
     JButton bupme = new JButton("Update my profile");
     JButton bupother = new JButton("Update other profile");
 
-    public void Update(JFrame window, Connection co , int id, String role) throws SQLException{
+    public JPanel Update(JFrame window, Connection co , int id, String role) throws SQLException{
         if(role == "admin") {
             d1.add(bupme);
             d1.add(bupother);
@@ -242,9 +257,9 @@ public class PersonalUser {
             bupme.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    window.getContentPane().removeAll();
-                    window.revalidate();
-                    window.repaint();
+                    d1.remove(bupme);
+                    d1.remove(bupother);
+                    f1.remove(d1);
                     d1.add(new JLabel("lastname"));
                     d1.add(u1);
                     d2.add(new JLabel("firstname"));
@@ -268,7 +283,8 @@ public class PersonalUser {
                     f1.add(d6);
                     f1.add(d7);
                     f1.add(d8);
-                    window.getContentPane().add(f1);
+                    pscroll.add(f1);
+                    window.getContentPane().add(pscroll);
                     window.setVisible(true);
                     String request = "UPDATE personal_user " +
                             "SET user_lastname = '" + u1.getText() + "', user_firstname = '" + u2.getText() + "', user_mail = '" + u3.getText() + "', user_phone = '" + u4.getText() + "', user_adress = '" + u5.getText() + "', user_ZIP = '"+u6.getText()+"', user_type = '"+u7.getText()+"'" +
@@ -284,9 +300,9 @@ public class PersonalUser {
             bupother.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    window.getContentPane().removeAll();
-                    window.revalidate();
-                    window.repaint();
+                    d1.remove(bupme);
+                    d1.remove(bupother);
+                    f1.remove(d1);
                     i = 0;
                     String request = "SELECT user_id, user_firstname, user_type " +
                             "FROM personal_user " +
@@ -313,9 +329,10 @@ public class PersonalUser {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             String d = String.valueOf(up.getSelectedItem());
-                            window.getContentPane().removeAll();
-                            window.revalidate();
-                            window.repaint();
+                            d1.remove(up);
+                            d2.remove(bupdate);
+                            f1.remove(d1);
+                            f1.remove(d2);
                             d1.add(new JLabel("lastname"));
                             d1.add(u1);
                             d2.add(new JLabel("firstname"));
@@ -339,7 +356,8 @@ public class PersonalUser {
                             f1.add(d6);
                             f1.add(d7);
                             f1.add(d8);
-                            window.getContentPane().add(f1);
+                            pscroll.add(f1);
+                            window.getContentPane().add(pscroll);
                             window.setVisible(true);
                             bup.addActionListener(new ActionListener() {
                                 @Override
@@ -361,9 +379,6 @@ public class PersonalUser {
             });
         }
         else{
-            window.getContentPane().removeAll();
-            window.revalidate();
-            window.repaint();
             d1.add(new JLabel("lastname"));
             d1.add(u1);
             d2.add(new JLabel("firstname"));
@@ -384,7 +399,8 @@ public class PersonalUser {
             f1.add(d5);
             f1.add(d6);
             f1.add(d8);
-            window.getContentPane().add(f1);
+            pscroll.add(f1);
+            window.getContentPane().add(pscroll);
             window.setVisible(true);
             String request = "UPDATE personal_user " +
                     "SET user_lastname = '" + u1.getText() + "', user_firstname = '" + u2.getText() + "', user_mail = '" + u3.getText() + "', user_phone = '" + u4.getText() + "', user_adress = '" + u5.getText() + "', user_ZIP = '"+u6.getText()+"'" +
@@ -397,5 +413,6 @@ public class PersonalUser {
             }
         }
         window.setVisible(true);
+        return pscroll;
     }
 }

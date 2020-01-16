@@ -12,6 +12,7 @@ public class Delete {
     private JButton brequest = new JButton("OK");
     private JButton breturn = new JButton("retour");
     public JPanel pscroll = new JPanel();
+    public JPanel delscroll = new JPanel();
     Box l1 = Box.createHorizontalBox();
     Box l2 = Box.createHorizontalBox();
     Box c1 = Box.createVerticalBox();
@@ -25,6 +26,7 @@ public class Delete {
     Food food = new Food();
     Photo photo = new Photo();
     PersonalUser personalUser = new PersonalUser();
+//    Menu menu = new Menu();
 
     public void Delete(JFrame window, Connection co, JPanel bmenu, int id, String role) {
         window.getContentPane().remove(bmenu);
@@ -39,77 +41,91 @@ public class Delete {
         window.getContentPane().add(pscroll);
         Object select = scroll.getSelectedItem();
         scroll.setSelectedItem(select);
+//        breturn.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                window.getContentPane().removeAll();
+//                window.revalidate();
+//                window.repaint();
+//                window.setVisible(true);
+//                menu.Menu(window, id, co, role);
+//            }
+//        });
         brequest.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int request = scroll.getSelectedIndex();
+                window.getContentPane().remove(delscroll);
+                window.revalidate();
+                window.repaint();
+                window.setVisible(true);
                 switch(request){
                     case 0:
                         try {
-                            ampConnect.Deleted(window, co, id);
+                            delscroll = ampConnect.Deleted(window, co, id);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 1:
                         try {
-                            camInstall.Deleted(window, co, id);
+                            delscroll = camInstall.Deleted(window, co, id);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 2:
                         try {
-                            datAmp.Deleted(window, co, id);
+                            delscroll = datAmp.Deleted(window, co, id);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 3:
                         try {
-                            dataTemp.Deleted(window, co, id);
+                            delscroll = dataTemp.Deleted(window, co, id);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 4:
                         try {
-                            food.Deleted(window, co, id);
+                            delscroll = food.Deleted(window, co, id);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 5:
                         try {
-                            photo.Deleted(window, co, id, role);
+                            delscroll = photo.Deleted(window, co, id, role);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 6:
                         try {
-                            room.Deleted(window, co, id);
+                            delscroll = room.Deleted(window, co, id);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 7:
                         try {
-                            sensor.Deleted(window, co, id);
+                            delscroll = sensor.Deleted(window, co, id);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 8:
                         try {
-                            thermoIntel.Deleted(window, co, id);
+                            delscroll = thermoIntel.Deleted(window, co, id);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
                         break;
                     case 9:
                         try {
-                            personalUser.Deleted(window, co, id, role);
+                            delscroll = personalUser.Deleted(window, co, id, role);
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }

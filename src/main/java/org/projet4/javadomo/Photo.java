@@ -19,8 +19,10 @@ public class Photo {
     Box l4 = Box.createHorizontalBox();
     Box c1 = Box.createVerticalBox();
     Table table = new Table();
+    JTable tab = new JTable();
+    JPanel pan = new JPanel();
 
-    public void Photo(JFrame window, int id, Connection co) throws SQLException {
+    public JPanel Photo(JFrame window, int id, Connection co) throws SQLException {
         String request = "SELECT photo_id, cam_name, photo_image, photo_date " +
                 "FROM photo AS P " +
                 "LEFT JOIN caminstall AS C " +
@@ -31,9 +33,12 @@ public class Photo {
                 " ORDER BY room_name ASC;";
         String[] t = {"id", "nom", "chemin", "date"};
         table.Table(window, co, t, request);
+        tab = table.Table(window, co, t, request);
+        pan.add(tab);
+        return pan;
     }
 
-    public void Insertion(JFrame window, Connection co){
+    public JPanel Insertion(JFrame window, Connection co){
         l1.add(new JLabel("caméra (int)"));
         l1.add(t1);
         l2.add(new JLabel("chemin"));
@@ -61,6 +66,7 @@ public class Photo {
             }
         });
         window.setVisible(true);
+        return pscroll;
     }
 
     int i;
@@ -72,7 +78,7 @@ public class Photo {
     Box d2 = Box.createHorizontalBox();
     Box f1 = Box.createVerticalBox();
 
-    public void Deleted(JFrame window, Connection co, int id, String role) throws SQLException {
+    public JPanel Deleted(JFrame window, Connection co, int id, String role) throws SQLException {
         if(role == "admin") {
             i = 0;
             String request = "SELECT photo_id " +
@@ -95,7 +101,8 @@ public class Photo {
             d2.add(bdelete);
             f1.add(d1);
             f1.add(d2);
-            window.getContentPane().add(f1);
+            pan.add(f1);
+            window.getContentPane().add(pan);
             bdelete.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -111,9 +118,11 @@ public class Photo {
             });
         }
         else{
-            window.getContentPane().add(new JLabel("You must be an admin to delete an image"));
+            pan.add(new JLabel("You must be an admin to delete an image"));
+            window.getContentPane().add(pan);
         }
         window.setVisible(true);
+        return pan;
     }
 
     JTextField u1 = new JTextField(15);
@@ -125,7 +134,7 @@ public class Photo {
     JButton bupdate = new JButton("Select");
     JButton bup = new JButton("Update");
 
-    public void Update(JFrame window, Connection co , int id) throws SQLException{
+    public JPanel Update(JFrame window, Connection co , int id) throws SQLException{
         i=0;
         String request = "SELECT photo_id " +
                 "FROM photo AS P " +
@@ -152,9 +161,10 @@ public class Photo {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String d = String.valueOf(up.getSelectedItem());
-                window.getContentPane().removeAll();
-                window.revalidate();
-                window.repaint();
+                d1.remove(up);
+                d2.remove(bupdate);
+                f1.remove(d1);
+                f1.remove(d2);
                 d1.add(new JLabel("caméra (id)"));
                 d1.add(u1);
                 d2.add(new JLabel("chemin"));
@@ -166,7 +176,8 @@ public class Photo {
                 f1.add(d2);
                 f1.add(d3);
                 f1.add(d6);
-                window.getContentPane().add(f1);
+                pscroll.add(f1);
+                window.getContentPane().add(pscroll);
                 window.setVisible(true);
                 bup.addActionListener(new ActionListener() {
                     @Override
@@ -185,5 +196,6 @@ public class Photo {
             }
         });
         window.setVisible(true);
+        return pscroll;
     }
 }

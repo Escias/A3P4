@@ -28,8 +28,10 @@ public class CamInstall {
     Box l7 = Box.createHorizontalBox();
     Box c1 = Box.createVerticalBox();
     Table table = new Table();
+    JTable tab = new JTable();
+    JPanel pan = new JPanel();
 
-    public void CamInstall(JFrame window, int id, Connection co) throws SQLException {
+    public JPanel CamInstall(JFrame window, int id, Connection co) throws SQLException {
         String request = "SELECT cam_name, R.room_name, cam_status, cam_dist, cam_time_begin, cam_time_end " +
                 "FROM caminstall AS C " +
                 "LEFT JOIN room AS R " +
@@ -38,9 +40,12 @@ public class CamInstall {
                 " ORDER BY cam_name ASC;";
         String[] t = {"name", "salle", "status", "distance", "début", "fin"};
         table.Table(window, co, t, request);
+        tab = table.Table(window, co, t, request);
+        pan.add(tab);
+        return pan;
     }
 
-    public void Insertion(JFrame window, Connection co){
+    public JPanel Insertion(JFrame window, Connection co){
         l1.add(new JLabel("nom"));
         l1.add(t1);
         l2.add(new JLabel("salle (int)"));
@@ -77,6 +82,7 @@ public class CamInstall {
             }
         });
         window.setVisible(true);
+        return pscroll;
     }
 
     int i;
@@ -88,7 +94,7 @@ public class CamInstall {
     Box d2 = Box.createHorizontalBox();
     Box f1 = Box.createVerticalBox();
 
-    public void Deleted(JFrame window, Connection co, int id) throws SQLException {
+    public JPanel Deleted(JFrame window, Connection co, int id) throws SQLException {
         i=0;
         String request = "SELECT cam_id, cam_name " +
                 "FROM caminstall AS C " +
@@ -108,7 +114,8 @@ public class CamInstall {
         d2.add(bdelete);
         f1.add(d1);
         f1.add(d2);
-        window.getContentPane().add(f1);
+        pscroll.add(f1);
+        window.getContentPane().add(pscroll);
         bdelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -123,6 +130,7 @@ public class CamInstall {
             }
         });
         window.setVisible(true);
+        return pscroll;
     }
 
     JTextField u1 = new JTextField(15);
@@ -138,7 +146,7 @@ public class CamInstall {
     JButton bupdate = new JButton("Select");
     JButton bup = new JButton("Update");
 
-    public void Update(JFrame window, Connection co , int id) throws SQLException{
+    public JPanel Update(JFrame window, Connection co , int id) throws SQLException{
         i=0;
         String request = "SELECT cam_id, cam_name " +
                 "FROM caminstall AS C " +
@@ -184,7 +192,8 @@ public class CamInstall {
                 f1.add(d4);
                 f1.add(d5);
                 f1.add(d6);
-                window.getContentPane().add(f1);
+                pscroll.add(f1);
+                window.getContentPane().add(pscroll);
                 bup.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -202,5 +211,6 @@ public class CamInstall {
             }
         });
         window.setVisible(true);
+        return pscroll;
     }
 }

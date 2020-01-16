@@ -25,8 +25,10 @@ public class ThermoIntel {
     Box l7 = Box.createHorizontalBox();
     Box c1 = Box.createVerticalBox();
     Table table = new Table();
+    JTable tab = new JTable();
+    JPanel pan = new JPanel();
 
-    public void ThermoIntel(JFrame window, int id, Connection co) throws SQLException {
+    public JPanel ThermoIntel(JFrame window, int id, Connection co) throws SQLException {
         String request = "SELECT thermo_id, R.room_name, thermo_name, thermo_temp_target, thermo_status, " +
                 "(SELECT sensor_name FROM sensor as S WHERE S.sensor_id = T.thermo_id_1) as nom_1, " +
                 "(SELECT sensor_name FROM sensor as S WHERE S.sensor_id = T.thermo_id_2) as nom_2 " +
@@ -39,9 +41,12 @@ public class ThermoIntel {
                 " ORDER BY thermo_id ASC;";
         String[] t = {"id", "salle", "nom", "temp. cible", "status"};
         table.Table(window, co, t, request);
+        tab = table.Table(window, co, t, request);
+        pan.add(tab);
+        return pan;
     }
 
-    public void Insertion(JFrame window, Connection co){
+    public JPanel Insertion(JFrame window, Connection co){
         l1.add(new JLabel("salle (int)"));
         l1.add(t1);
         l2.add(new JLabel("nom"));
@@ -78,6 +83,7 @@ public class ThermoIntel {
             }
         });
         window.setVisible(true);
+        return pscroll;
     }
 
     int i;
@@ -89,7 +95,7 @@ public class ThermoIntel {
     Box d2 = Box.createHorizontalBox();
     Box f1 = Box.createVerticalBox();
 
-    public void Deleted(JFrame window, Connection co, int id) throws SQLException {
+    public JPanel Deleted(JFrame window, Connection co, int id) throws SQLException {
         i=0;
         String request = "SELECT thermo_id, thermo_name "+
                 "FROM thermointel as T " +
@@ -111,7 +117,8 @@ public class ThermoIntel {
         d2.add(bdelete);
         f1.add(d1);
         f1.add(d2);
-        window.getContentPane().add(f1);
+        pscroll.add(f1);
+        window.getContentPane().add(pscroll);
         bdelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -126,6 +133,7 @@ public class ThermoIntel {
             }
         });
         window.setVisible(true);
+        return pscroll;
     }
 
     JTextField u1 = new JTextField(15);
@@ -141,7 +149,7 @@ public class ThermoIntel {
     JButton bupdate = new JButton("Select");
     JButton bup = new JButton("Update");
 
-    public void Update(JFrame window, Connection co , int id) throws SQLException{
+    public JPanel Update(JFrame window, Connection co , int id) throws SQLException{
         i=0;
         String request = "SELECT thermo_id, thermo_name "+
                 "FROM thermointel as T " +
@@ -168,9 +176,10 @@ public class ThermoIntel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String d = String.valueOf(up.getSelectedItem());
-                window.getContentPane().removeAll();
-                window.revalidate();
-                window.repaint();
+                d1.remove(up);
+                d2.remove(bupdate);
+                f1.remove(d1);
+                f1.remove(d2);
                 d1.add(new JLabel("salle (id)"));
                 d1.add(u1);
                 d2.add(new JLabel("capteur 1 (id)"));
@@ -188,7 +197,8 @@ public class ThermoIntel {
                 f1.add(d4);
                 f1.add(d5);
                 f1.add(d6);
-                window.getContentPane().add(f1);
+                pscroll.add(f1);
+                window.getContentPane().add(pscroll);
                 window.setVisible(true);
                 bup.addActionListener(new ActionListener() {
                     @Override
@@ -207,5 +217,6 @@ public class ThermoIntel {
             }
         });
         window.setVisible(true);
+        return pscroll;
     }
 }

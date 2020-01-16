@@ -25,8 +25,11 @@ public class AmpConnect {
     Box l7 = Box.createHorizontalBox();
     Box c1 = Box.createVerticalBox();
     Table table = new Table();
+    JTable tab = new JTable();
+    JPanel pan = new JPanel();
 
-    public void AmpConnect(JFrame window ,int id, Connection co) throws SQLException {
+
+    public JPanel AmpConnect(JFrame window ,int id, Connection co) throws SQLException {
         String request = "SELECT amp_name, R.room_name, amp_status, amp_color, amp_time_on, amp_time_off " +
                 "FROM ampconnect AS A " +
                 "LEFT JOIN room AS R " +
@@ -35,9 +38,12 @@ public class AmpConnect {
                 " ORDER BY amp_name ASC;";
         String[] t = {"name", "salle", "status", "couleur", "heure d'activation", "heure d'extinction"};
         table.Table(window, co, t, request);
+        tab = table.Table(window, co, t, request);
+        pan.add(tab);
+        return pan;
     }
 
-    public void Insertion(JFrame window, Connection co){
+    public JPanel Insertion(JFrame window, Connection co){
         l1.add(new JLabel("nom"));
         l1.add(t1);
         l2.add(new JLabel("salle (id)"));
@@ -74,6 +80,7 @@ public class AmpConnect {
             }
         });
         window.setVisible(true);
+        return pscroll;
     }
 
     int i;
@@ -85,7 +92,7 @@ public class AmpConnect {
     Box d2 = Box.createHorizontalBox();
     Box f1 = Box.createVerticalBox();
 
-    public void Deleted(JFrame window, Connection co, int id) throws SQLException {
+    public JPanel Deleted(JFrame window, Connection co, int id) throws SQLException {
         i=0;
         String request = "SELECT amp_id, amp_name " +
                 "FROM ampconnect AS A " +
@@ -105,7 +112,8 @@ public class AmpConnect {
         d2.add(bdelete);
         f1.add(d1);
         f1.add(d2);
-        window.getContentPane().add(f1);
+        pscroll.add(f1);
+        window.getContentPane().add(pscroll);
         bdelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -120,6 +128,7 @@ public class AmpConnect {
             }
         });
         window.setVisible(true);
+        return pscroll;
     }
 
     JTextField u1 = new JTextField(15);
@@ -135,7 +144,7 @@ public class AmpConnect {
     JButton bupdate = new JButton("Select");
     JButton bup = new JButton("Update");
 
-    public void Update(JFrame window, Connection co , int id) throws SQLException{
+    public JPanel Update(JFrame window, Connection co , int id) throws SQLException{
         i=0;
         String request = "SELECT amp_id, amp_name " +
                 "FROM ampconnect AS A " +
@@ -181,7 +190,8 @@ public class AmpConnect {
                 f1.add(d4);
                 f1.add(d5);
                 f1.add(d6);
-                window.getContentPane().add(f1);
+                pscroll.add(f1);
+                window.getContentPane().add(pscroll);
                 bup.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -199,5 +209,6 @@ public class AmpConnect {
             }
         });
         window.setVisible(true);
+        return pscroll;
     }
 }

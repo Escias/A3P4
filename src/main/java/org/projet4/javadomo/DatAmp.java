@@ -19,8 +19,10 @@ public class DatAmp {
     Box l4 = Box.createHorizontalBox();
     Box c1 = Box.createVerticalBox();
     Table table = new Table();
+    JTable tab = new JTable();
+    JPanel pan = new JPanel();
 
-    public void DatAmp(JFrame window, int id, Connection co) throws SQLException {
+    public JPanel DatAmp(JFrame window, int id, Connection co) throws SQLException {
         String request = "SELECT datamp_id, A.amp_name, datamp_action, datamp_datetime " +
                 "FROM datamp AS D " +
                 "LEFT JOIN ampconnect AS A " +
@@ -31,9 +33,12 @@ public class DatAmp {
                 " ORDER BY datamp_id ASC;";
         String[] t = {"name", "description"};
         table.Table(window, co, t, request);
+        tab = table.Table(window, co, t, request);
+        pan.add(tab);
+        return pan;
     }
 
-    public void Insertion(JFrame window, Connection co){
+    public JPanel Insertion(JFrame window, Connection co){
         l1.add(new JLabel("ampoule (int)"));
         l1.add(t1);
         l2.add(new JLabel("action (allumer/éteindre)"));
@@ -61,6 +66,7 @@ public class DatAmp {
             }
         });
         window.setVisible(true);
+        return pscroll;
     }
 
     int i;
@@ -72,7 +78,7 @@ public class DatAmp {
     Box d2 = Box.createHorizontalBox();
     Box f1 = Box.createVerticalBox();
 
-    public void Deleted(JFrame window, Connection co, int id) throws SQLException {
+    public JPanel Deleted(JFrame window, Connection co, int id) throws SQLException {
         i=0;
         String request = "SELECT datamp_id " +
                 "FROM datamp AS D " +
@@ -94,7 +100,8 @@ public class DatAmp {
         d2.add(bdelete);
         f1.add(d1);
         f1.add(d2);
-        window.getContentPane().add(f1);
+        pscroll.add(f1);
+        window.getContentPane().add(pscroll);
         bdelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -109,6 +116,7 @@ public class DatAmp {
             }
         });
         window.setVisible(true);
+        return pscroll;
     }
 
     JTextField u1 = new JTextField(15);
@@ -120,7 +128,7 @@ public class DatAmp {
     JButton bupdate = new JButton("Select");
     JButton bup = new JButton("Update");
 
-    public void Update(JFrame window, Connection co , int id) throws SQLException{
+    public JPanel Update(JFrame window, Connection co , int id) throws SQLException{
         i=0;
         String request = "SELECT datamp_id " +
                 "FROM datamp AS D " +
@@ -162,7 +170,8 @@ public class DatAmp {
                 f1.add(d2);
                 f1.add(d3);
                 f1.add(d6);
-                window.getContentPane().add(f1);
+                pscroll.add(f1);
+                window.getContentPane().add(pscroll);
                 bup.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -180,5 +189,6 @@ public class DatAmp {
             }
         });
         window.setVisible(true);
+        return pscroll;
     }
 }

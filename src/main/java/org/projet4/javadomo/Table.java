@@ -7,7 +7,7 @@ import java.sql.*;
 
 public class Table {
 
-    public void Table(JFrame window, Connection co, String[] t, String req) {
+    public JTable Table(JFrame window, Connection co, String[] t, String req) {
         JTable table = new JTable();
         DefaultTableModel aModel = (DefaultTableModel) table.getModel();
         aModel.setColumnIdentifiers(t);
@@ -33,5 +33,6 @@ public class Table {
             e.printStackTrace();
         }
         window.setVisible(true);
+        return table;
     }
 }
