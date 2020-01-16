@@ -31,33 +31,15 @@ public class PersonalUser {
     Box l8 = Box.createHorizontalBox();
     Box l9 = Box.createHorizontalBox();
     Box c1 = Box.createVerticalBox();
+    Table table = new Table();
 
     public void PersonalUser(JFrame window, int id, Connection co) throws SQLException {
         String request = "SELECT user_lastname, user_firstname, user_mail, user_phone, user_adress, user_ZIP, user_type " +
                 "FROM personal_user " +
                 "WHERE user_id = "+id+
                 " ORDER BY user_lastname ASC;";
-        Statement stm = co.createStatement();
-        ResultSet rslt = stm.executeQuery(request);
-        while (rslt.next()){
-            l1.add(new JLabel("lastname : "+rslt.getString(1)));
-            l2.add(new JLabel("firstname : "+rslt.getString(2)));
-            l3.add(new JLabel("mail : "+rslt.getString(3)));
-            l4.add(new JLabel("phone : "+rslt.getInt(4)));
-            l5.add(new JLabel("adress : "+rslt.getString(5)));
-            l6.add(new JLabel("ZIP : "+rslt.getInt(6)));
-            l7.add(new JLabel("type : "+rslt.getString(7)));
-            c1.add(l1);
-            c1.add(l2);
-            c1.add(l3);
-            c1.add(l4);
-            c1.add(l5);
-            c1.add(l6);
-            c1.add(l7);
-            pscroll.add(c1);
-            window.getContentPane().add(pscroll);
-            window.setVisible(true);
-        }
+        String[] t = {"nom", "prénom", "mail", "téléphone", "adresse", "ZIP", "type"};
+        table.Table(window, co, t, request);
     }
 
     public void Insertion(JFrame window, Connection co, String role){
@@ -107,11 +89,11 @@ public class PersonalUser {
         else{
             window.getContentPane().add(new JLabel("You must be an admin to add user"));
         }
+        window.setVisible(true);
     }
 
     int i;
     String s;
-    String ro;
     List<String> data = new ArrayList<>();
     JComboBox del = new JComboBox();
     JButton bdelete = new JButton("Delete");
@@ -229,6 +211,190 @@ public class PersonalUser {
 
                 }
             });
+        }
+        window.setVisible(true);
+    }
+
+    JTextField u1 = new JTextField(15);
+    JTextField u2 = new JTextField(15);
+    JTextField u3 = new JTextField(15);
+    JTextField u4 = new JTextField(15);
+    JTextField u5 = new JTextField(15);
+    JTextField u6 = new JTextField(15);
+    JTextField u7 = new JTextField(15);
+    Box d3 = Box.createHorizontalBox();
+    Box d4 = Box.createHorizontalBox();
+    Box d5 = Box.createHorizontalBox();
+    Box d6 = Box.createHorizontalBox();
+    Box d7 = Box.createHorizontalBox();
+    Box d8 = Box.createHorizontalBox();
+    JComboBox up = new JComboBox();
+    JButton bupdate = new JButton("Select");
+    JButton bup = new JButton("Update");
+    JButton bupme = new JButton("Update my profile");
+    JButton bupother = new JButton("Update other profile");
+
+    public void Update(JFrame window, Connection co , int id, String role) throws SQLException{
+        if(role == "admin") {
+            d1.add(bupme);
+            d1.add(bupother);
+            f1.add(d1);
+            bupme.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    window.getContentPane().removeAll();
+                    window.revalidate();
+                    window.repaint();
+                    d1.add(new JLabel("lastname"));
+                    d1.add(u1);
+                    d2.add(new JLabel("firstname"));
+                    d2.add(u2);
+                    d3.add(new JLabel("mail"));
+                    d3.add(u3);
+                    d4.add(new JLabel("phone"));
+                    d4.add(u4);
+                    d5.add(new JLabel("adress"));
+                    d5.add(u5);
+                    d6.add(new JLabel("ZIP"));
+                    d6.add(u6);
+                    d7.add(new JLabel("type (admin, normal)"));
+                    d7.add(u7);
+                    d8.add(bup);
+                    f1.add(d1);
+                    f1.add(d2);
+                    f1.add(d3);
+                    f1.add(d4);
+                    f1.add(d5);
+                    f1.add(d6);
+                    f1.add(d7);
+                    f1.add(d8);
+                    window.getContentPane().add(f1);
+                    window.setVisible(true);
+                    String request = "UPDATE personal_user " +
+                            "SET user_lastname = '" + u1.getText() + "', user_firstname = '" + u2.getText() + "', user_mail = '" + u3.getText() + "', user_phone = '" + u4.getText() + "', user_adress = '" + u5.getText() + "', user_ZIP = '"+u6.getText()+"', user_type = '"+u7.getText()+"'" +
+                            "WHERE user_id = '" + id + "'";
+                    try {
+                        Statement stm = co.createStatement();
+                        stm.executeUpdate(request);
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+            bupother.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    window.getContentPane().removeAll();
+                    window.revalidate();
+                    window.repaint();
+                    i = 0;
+                    String request = "SELECT user_id, user_firstname, user_type " +
+                            "FROM personal_user " +
+                            "WHERE user_type != 'admin'" +
+                            " ORDER BY user_id ASC;";
+                    try {
+                        Statement stm = co.createStatement();
+                        ResultSet rslt = stm.executeQuery(request);
+                        while (rslt.next()) {
+                            s = rslt.getString(2);
+                            data.add(s);
+                            i++;
+                        }
+                    }catch(SQLException ex){
+                        ex.printStackTrace();
+                    }
+                    up.setModel(new DefaultComboBoxModel(data.toArray()));
+                    d1.add(up);
+                    d2.add(bupdate);
+                    f1.add(d1);
+                    f1.add(d2);
+                    window.getContentPane().add(f1);
+                    bupdate.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            String d = String.valueOf(up.getSelectedItem());
+                            window.getContentPane().removeAll();
+                            window.revalidate();
+                            window.repaint();
+                            d1.add(new JLabel("lastname"));
+                            d1.add(u1);
+                            d2.add(new JLabel("firstname"));
+                            d2.add(u2);
+                            d3.add(new JLabel("mail"));
+                            d3.add(u3);
+                            d4.add(new JLabel("phone"));
+                            d4.add(u4);
+                            d5.add(new JLabel("adress"));
+                            d5.add(u5);
+                            d6.add(new JLabel("ZIP"));
+                            d6.add(u6);
+                            d7.add(new JLabel("type (admin, normal)"));
+                            d7.add(u7);
+                            d8.add(bup);
+                            f1.add(d1);
+                            f1.add(d2);
+                            f1.add(d3);
+                            f1.add(d4);
+                            f1.add(d5);
+                            f1.add(d6);
+                            f1.add(d7);
+                            f1.add(d8);
+                            window.getContentPane().add(f1);
+                            window.setVisible(true);
+                            bup.addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    String request = "UPDATE personal_user " +
+                                            "SET user_lastname = '" + u1.getText() + "', user_firstname = '" + u2.getText() + "', user_mail = '" + u3.getText() + "', user_phone = '" + u4.getText() + "', user_adress = '" + u5.getText() + "', user_ZIP = '"+u6.getText()+"', user_type = '"+u7.getText()+"'" +
+                                            "WHERE user_id = '" + d + "'";
+                                    try {
+                                        Statement stm = co.createStatement();
+                                        stm.executeUpdate(request);
+                                    } catch (SQLException ex) {
+                                        ex.printStackTrace();
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+        else{
+            window.getContentPane().removeAll();
+            window.revalidate();
+            window.repaint();
+            d1.add(new JLabel("lastname"));
+            d1.add(u1);
+            d2.add(new JLabel("firstname"));
+            d2.add(u2);
+            d3.add(new JLabel("mail"));
+            d3.add(u3);
+            d4.add(new JLabel("phone"));
+            d4.add(u4);
+            d5.add(new JLabel("adress"));
+            d5.add(u5);
+            d6.add(new JLabel("ZIP"));
+            d6.add(u6);
+            d8.add(bup);
+            f1.add(d1);
+            f1.add(d2);
+            f1.add(d3);
+            f1.add(d4);
+            f1.add(d5);
+            f1.add(d6);
+            f1.add(d8);
+            window.getContentPane().add(f1);
+            window.setVisible(true);
+            String request = "UPDATE personal_user " +
+                    "SET user_lastname = '" + u1.getText() + "', user_firstname = '" + u2.getText() + "', user_mail = '" + u3.getText() + "', user_phone = '" + u4.getText() + "', user_adress = '" + u5.getText() + "', user_ZIP = '"+u6.getText()+"'" +
+                    "WHERE user_id = '" + id + "'";
+            try {
+                Statement stm = co.createStatement();
+                stm.executeUpdate(request);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         window.setVisible(true);
     }

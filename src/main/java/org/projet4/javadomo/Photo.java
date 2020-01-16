@@ -18,8 +18,9 @@ public class Photo {
     Box l3 = Box.createHorizontalBox();
     Box l4 = Box.createHorizontalBox();
     Box c1 = Box.createVerticalBox();
+    Table table = new Table();
 
-    public JPanel Photo(JFrame window, int id, Connection co) throws SQLException {
+    public void Photo(JFrame window, int id, Connection co) throws SQLException {
         String request = "SELECT photo_id, cam_name, photo_image, photo_date " +
                 "FROM photo AS P " +
                 "LEFT JOIN caminstall AS C " +
@@ -28,20 +29,8 @@ public class Photo {
                 "ON R.room_id = C.cam_room_id " +
                 "WHERE R.room_user_id = " + id +
                 " ORDER BY room_name ASC;";
-        Statement stm = co.createStatement();
-        ResultSet rslt = stm.executeQuery(request);
-        while (rslt.next()){
-            l1.add(new JLabel("name : "+rslt.getString(1)));
-            l2.add(new JLabel("description :"+rslt.getString(2)));
-            l3.add(new JLabel("                                                      "));
-            c1.add(l1);
-            c1.add(l2);
-            c1.add(l3);
-            pscroll.add(c1);
-            window.getContentPane().add(pscroll);
-            window.setVisible(true);
-        }
-        return pscroll;
+        String[] t = {"id", "nom", "chemin", "date"};
+        table.Table(window, co, t, request);
     }
 
     public void Insertion(JFrame window, Connection co){
@@ -71,6 +60,7 @@ public class Photo {
                 }
             }
         });
+        window.setVisible(true);
     }
 
     int i;
@@ -123,6 +113,77 @@ public class Photo {
         else{
             window.getContentPane().add(new JLabel("You must be an admin to delete an image"));
         }
+        window.setVisible(true);
+    }
+
+    JTextField u1 = new JTextField(15);
+    JTextField u2 = new JTextField(15);
+    JTextField u3 = new JTextField(15);
+    Box d3 = Box.createHorizontalBox();
+    Box d6 = Box.createHorizontalBox();
+    JComboBox up = new JComboBox();
+    JButton bupdate = new JButton("Select");
+    JButton bup = new JButton("Update");
+
+    public void Update(JFrame window, Connection co , int id) throws SQLException{
+        i=0;
+        String request = "SELECT photo_id " +
+                "FROM photo AS P " +
+                "LEFT JOIN caminstall AS C " +
+                "ON C.cam_id = P.photo_cam_id " +
+                "LEFT JOIN room AS R " +
+                "ON R.room_id = C.cam_room_id " +
+                "WHERE R.room_user_id = " + id +
+                " ORDER BY photo_id ASC;";
+        Statement stm = co.createStatement();
+        ResultSet rslt = stm.executeQuery(request);
+        while(rslt.next()){
+            s = rslt.getString(1);
+            data.add(s);
+            i++;
+        }
+        up.setModel(new DefaultComboBoxModel(data.toArray()));
+        d1.add(up);
+        d2.add(bupdate);
+        f1.add(d1);
+        f1.add(d2);
+        window.getContentPane().add(f1);
+        bupdate.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String d = String.valueOf(up.getSelectedItem());
+                window.getContentPane().removeAll();
+                window.revalidate();
+                window.repaint();
+                d1.add(new JLabel("caméra (id)"));
+                d1.add(u1);
+                d2.add(new JLabel("chemin"));
+                d2.add(u2);
+                d3.add(new JLabel("date capture"));
+                d3.add(u3);
+                d6.add(bup);
+                f1.add(d1);
+                f1.add(d2);
+                f1.add(d3);
+                f1.add(d6);
+                window.getContentPane().add(f1);
+                window.setVisible(true);
+                bup.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String request = "UPDATE photo " +
+                                "SET photo_cam_id = '"+u1.getText()+"', photo_image = '"+u2.getText()+"', phot_date = '"+u3.getText()+"' "+
+                                "WHERE photo_id = '"+d+"'";
+                        try {
+                            Statement stm = co.createStatement();
+                            stm.executeUpdate(request);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
         window.setVisible(true);
     }
 }

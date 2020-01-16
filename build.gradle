@@ -14,4 +14,5 @@ repositories {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     implementation 'mysql:mysql-connector-java:8.0.18'
+    compile group: 'org.ini4j', name: 'ini4j', version: '0.5.1'
 }

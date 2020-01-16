@@ -17,25 +17,15 @@ public class Room {
     Box l3 = Box.createHorizontalBox();
     Box l4 = Box.createHorizontalBox();
     Box c1 = Box.createVerticalBox();
+    Table table = new Table();
 
     public void Room(JFrame window, int id, Connection co) throws SQLException {
         String request = "SELECT room_name, room_description " +
-                        "FROM room " +
-                        "WHERE room_user_id = "+id+
-                        " ORDER BY room_name ASC;";
-        Statement stm = co.createStatement();
-        ResultSet rslt = stm.executeQuery(request);
-        while (rslt.next()){
-            l1.add(new JLabel("name : "+rslt.getString(1)));
-            l2.add(new JLabel("description :"+rslt.getString(2)));
-            l3.add(new JLabel("                                                      "));
-            c1.add(l1);
-            c1.add(l2);
-            c1.add(l3);
-            pscroll.add(c1);
-            window.getContentPane().add(pscroll);
-            window.setVisible(true);
-        }
+                "FROM room " +
+                "WHERE room_user_id = " + id +
+                " ORDER BY room_name ASC;";
+        String[] t = {"name", "description"};
+        table.Table(window, co, t, request);
     }
 
     public void Insertion(JFrame window, Connection co, int id){
@@ -62,6 +52,7 @@ public class Room {
                 }
             }
         });
+        window.setVisible(true);
     }
 
     int i;
@@ -103,6 +94,73 @@ public class Room {
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
+            }
+        });
+        window.setVisible(true);
+    }
+
+    JTextField u1 = new JTextField(15);
+    JTextField u2 = new JTextField(15);
+    JTextField u3 = new JTextField(15);
+    Box d3 = Box.createHorizontalBox();
+    Box d6 = Box.createHorizontalBox();
+    JComboBox up = new JComboBox();
+    JButton bupdate = new JButton("Select");
+    JButton bup = new JButton("Update");
+
+    public void Update(JFrame window, Connection co , int id) throws SQLException{
+        i=0;
+        String request = "SELECT room_id, room_name " +
+                "FROM room " +
+                "WHERE room_user_id = "+id+
+                " ORDER BY room_id ASC;";
+        Statement stm = co.createStatement();
+        ResultSet rslt = stm.executeQuery(request);
+        while(rslt.next()){
+            s = rslt.getString(2);
+            data.add(s);
+            i++;
+        }
+        up.setModel(new DefaultComboBoxModel(data.toArray()));
+        d1.add(up);
+        d2.add(bupdate);
+        f1.add(d1);
+        f1.add(d2);
+        window.getContentPane().add(f1);
+        bupdate.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String d = String.valueOf(up.getSelectedItem());
+                window.getContentPane().removeAll();
+                window.revalidate();
+                window.repaint();
+                d1.add(new JLabel("nom"));
+                d1.add(u1);
+                d2.add(new JLabel("user (id)"));
+                d2.add(u2);
+                d3.add(new JLabel("description"));
+                d3.add(u3);
+                d6.add(bup);
+                f1.add(d1);
+                f1.add(d2);
+                f1.add(d3);
+                f1.add(d6);
+                window.getContentPane().add(f1);
+                window.setVisible(true);
+                bup.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String request = "UPDATE room " +
+                                "SET room_name = '"+u1.getText()+"', room_user_id = '"+u2.getText()+"', room_description = '"+u3.getText()+"' "+
+                                "WHERE room_name = '"+d+"'";
+                        try {
+                            Statement stm = co.createStatement();
+                            stm.executeUpdate(request);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                });
             }
         });
         window.setVisible(true);
