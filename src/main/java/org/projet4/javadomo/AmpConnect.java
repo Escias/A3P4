@@ -24,6 +24,7 @@ public class AmpConnect {
     Box l6 = Box.createHorizontalBox();
     Box l7 = Box.createHorizontalBox();
     Box c1 = Box.createVerticalBox();
+    Table table = new Table();
 
     public void AmpConnect(JFrame window ,int id, Connection co) throws SQLException {
         String request = "SELECT amp_name, R.room_name, amp_status, amp_color, amp_time_on, amp_time_off " +
@@ -32,25 +33,8 @@ public class AmpConnect {
                 "ON R.room_id = A.amp_room_id " +
                 "WHERE R.room_user_id = " + id +
                 " ORDER BY amp_name ASC;";
-        Statement stm = co.createStatement();
-        ResultSet rslt = stm.executeQuery(request);
-        while (rslt.next()) {
-            l1.add(new JLabel("name : " + rslt.getString(1)));
-            l2.add(new JLabel("room : " + rslt.getString(2)));
-            l3.add(new JLabel("Etat : " + rslt.getString(3)));
-            l4.add(new JLabel("Couleur : " + rslt.getString(4)));
-            l5.add(new JLabel("Début : " + rslt.getString(5)));
-            l6.add(new JLabel("Fin : " + rslt.getString(6)));
-            c1.add(l1);
-            c1.add(l2);
-            c1.add(l3);
-            c1.add(l4);
-            c1.add(l5);
-            c1.add(l6);
-            pscroll.add(c1);
-            window.getContentPane().add(pscroll);
-            window.setVisible(true);
-        }
+        String[] t = {"name", "salle", "status", "couleur", "heure d'activation", "heure d'extinction"};
+        table.Table(window, co, t, request);
     }
 
     public void Insertion(JFrame window, Connection co){
@@ -89,6 +73,7 @@ public class AmpConnect {
                 }
             }
         });
+        window.setVisible(true);
     }
 
     int i;
@@ -132,6 +117,85 @@ public class AmpConnect {
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
+            }
+        });
+        window.setVisible(true);
+    }
+
+    JTextField u1 = new JTextField(15);
+    JTextField u2 = new JTextField(15);
+    JTextField u3 = new JTextField(15);
+    JTextField u4 = new JTextField(15);
+    JTextField u5 = new JTextField(15);
+    Box d3 = Box.createHorizontalBox();
+    Box d4 = Box.createHorizontalBox();
+    Box d5 = Box.createHorizontalBox();
+    Box d6 = Box.createHorizontalBox();
+    JComboBox up = new JComboBox();
+    JButton bupdate = new JButton("Select");
+    JButton bup = new JButton("Update");
+
+    public void Update(JFrame window, Connection co , int id) throws SQLException{
+        i=0;
+        String request = "SELECT amp_id, amp_name " +
+                "FROM ampconnect AS A " +
+                "LEFT JOIN room AS R " +
+                "ON R.room_id = A.amp_room_id " +
+                "WHERE R.room_user_id = " + id +
+                " ORDER BY amp_id ASC;";
+        Statement stm = co.createStatement();
+        ResultSet rslt = stm.executeQuery(request);
+        while(rslt.next()){
+            s = rslt.getString(2);
+            data.add(s);
+            i++;
+        }
+        up.setModel(new DefaultComboBoxModel(data.toArray()));
+        d1.add(up);
+        d2.add(bupdate);
+        f1.add(d1);
+        f1.add(d2);
+        window.getContentPane().add(f1);
+        bupdate.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String d = String.valueOf(up.getSelectedItem());
+                d1.remove(up);
+                d2.remove(bupdate);
+                f1.remove(d1);
+                f1.remove(d2);
+                d1.add(new JLabel("salle (id)"));
+                d1.add(u1);
+                d2.add(new JLabel("état (on/off)"));
+                d2.add(u2);
+                d3.add(new JLabel("couleur"));
+                d3.add(u3);
+                d4.add(new JLabel("heure d'activation"));
+                d4.add(u4);
+                d5.add(new JLabel("heure d'extinction"));
+                d5.add(u5);
+                d6.add(bup);
+                f1.add(d1);
+                f1.add(d2);
+                f1.add(d3);
+                f1.add(d4);
+                f1.add(d5);
+                f1.add(d6);
+                window.getContentPane().add(f1);
+                bup.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String request = "UPDATE ampconnect " +
+                                "SET amp_room_id = '"+u1.getText()+"', amp_status = '"+u2.getText()+"', amp_color = '"+u3.getText()+"', amp_time_on = '"+u4.getText()+"', amp_time_off = '"+u5.getText()+"' "+
+                                "WHERE amp_name = '"+d+"'";
+                        try {
+                            Statement stm = co.createStatement();
+                            stm.executeUpdate(request);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                });
             }
         });
         window.setVisible(true);

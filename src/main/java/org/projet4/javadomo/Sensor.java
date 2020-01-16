@@ -24,6 +24,7 @@ public class Sensor {
     Box l6 = Box.createHorizontalBox();
     Box l7 = Box.createHorizontalBox();
     Box c1 = Box.createVerticalBox();
+    Table table = new Table();
 
     public void Sensor(JFrame window, int id, Connection co) throws SQLException {
         String request = "SELECT sensor_id, sensor_name, R.room_name, sensor_status, sensor_interval, sensor_temp_min, sensor_temp_max " +
@@ -32,25 +33,8 @@ public class Sensor {
                 "ON R.room_id = S.sensor_room_id " +
                 "WHERE R.room_user_id = " + id +
                 " ORDER BY sensor_id ASC;";
-        Statement stm = co.createStatement();
-        ResultSet rslt = stm.executeQuery(request);
-        while (rslt.next()){
-            l1.add(new JLabel("Name : " + rslt.getString(2)));
-            l2.add(new JLabel("Salle : " + rslt.getString(3)));
-            l3.add(new JLabel("Etat : " + rslt.getString(4)));
-            l4.add(new JLabel("Interval : " + rslt.getInt(5)));
-            l5.add(new JLabel("Température min : " + rslt.getInt(6)));
-            l6.add(new JLabel("Température max : " + rslt.getInt(7)));
-            c1.add(l1);
-            c1.add(l2);
-            c1.add(l3);
-            c1.add(l4);
-            c1.add(l5);
-            c1.add(l6);
-            pscroll.add(c1);
-            window.getContentPane().add(pscroll);
-            window.setVisible(true);
-        }
+        String[] t = {"id", "nom", "salle", "status", "interval (s)", "temp. min", "temp. max"};
+        table.Table(window, co, t, request);
     }
 
     public void Insertion(JFrame window, Connection co){
@@ -89,6 +73,7 @@ public class Sensor {
                 }
             }
         });
+        window.setVisible(true);
     }
 
     int i;
@@ -132,6 +117,85 @@ public class Sensor {
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
+            }
+        });
+        window.setVisible(true);
+    }
+
+    JTextField u1 = new JTextField(15);
+    JTextField u2 = new JTextField(15);
+    JTextField u3 = new JTextField(15);
+    JTextField u4 = new JTextField(15);
+    JTextField u5 = new JTextField(15);
+    Box d3 = Box.createHorizontalBox();
+    Box d4 = Box.createHorizontalBox();
+    Box d5 = Box.createHorizontalBox();
+    Box d6 = Box.createHorizontalBox();
+    JComboBox up = new JComboBox();
+    JButton bupdate = new JButton("Select");
+    JButton bup = new JButton("Update");
+
+    public void Update(JFrame window, Connection co , int id) throws SQLException{
+        i=0;
+        String request = "SELECT sensor_id, sensor_name " +
+                "FROM sensor AS S " +
+                "LEFT JOIN room AS R " +
+                "ON R.room_id = S.sensor_room_id " +
+                "WHERE R.room_user_id = " + id +
+                " ORDER BY sensor_id ASC;";
+        Statement stm = co.createStatement();
+        ResultSet rslt = stm.executeQuery(request);
+        while(rslt.next()){
+            s = rslt.getString(2);
+            data.add(s);
+            i++;
+        }
+        up.setModel(new DefaultComboBoxModel(data.toArray()));
+        d1.add(up);
+        d2.add(bupdate);
+        f1.add(d1);
+        f1.add(d2);
+        window.getContentPane().add(f1);
+        bupdate.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String d = String.valueOf(up.getSelectedItem());
+                window.getContentPane().removeAll();
+                window.revalidate();
+                window.repaint();
+                d1.add(new JLabel("salle (id)"));
+                d1.add(u1);
+                d2.add(new JLabel("état (on/off)"));
+                d2.add(u2);
+                d3.add(new JLabel("interval"));
+                d3.add(u3);
+                d4.add(new JLabel("temp. min"));
+                d4.add(u4);
+                d5.add(new JLabel("temp. max"));
+                d5.add(u5);
+                d6.add(bup);
+                f1.add(d1);
+                f1.add(d2);
+                f1.add(d3);
+                f1.add(d4);
+                f1.add(d5);
+                f1.add(d6);
+                window.getContentPane().add(f1);
+                window.setVisible(true);
+                bup.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String request = "UPDATE sensor " +
+                                "SET sensor_room_id = '"+u1.getText()+"', sensor status = '"+u2.getText()+"', sensor_interval = '"+u3.getText()+"', sensor_temp_min = '"+u4.getText()+"', sensor_temp_max = '"+u5.getText()+"' "+
+                                "WHERE sensor_name = '"+d+"'";
+                        try {
+                            Statement stm = co.createStatement();
+                            stm.executeUpdate(request);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                });
             }
         });
         window.setVisible(true);

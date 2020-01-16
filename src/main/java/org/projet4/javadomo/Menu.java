@@ -17,8 +17,12 @@ public class Menu {
     Request req = new Request();
     Insert insert = new Insert();
     Delete del = new Delete();
+    Update up = new Update();
 
     public void Menu(JFrame window, int id, Connection co, String role){
+        window.getContentPane().removeAll();
+        window.revalidate();
+        window.repaint();
         l1.add(request);
         l1.add(insertion);
         l2.add(update);
@@ -32,7 +36,7 @@ public class Menu {
         update.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                up.Update(window, co, bmenu, id, role);
             }
         });
         insertion.addActionListener(new ActionListener() {

@@ -26,6 +26,7 @@ public class Food {
     Box l6 = Box.createHorizontalBox();
     Box l7 = Box.createHorizontalBox();
     Box c1 = Box.createVerticalBox();
+    Table table = new Table();
 
     public void Food(JFrame window, int id, Connection co) throws SQLException {
         String request = "SELECT food_id, R.room_name, food_name, food_perempt, food_quantity " +
@@ -34,21 +35,8 @@ public class Food {
                 "ON R.room_id = F.food_room_id " +
                 "WHERE R.room_user_id = " + id +
                 " ORDER BY food_id ASC;";
-        Statement stm = co.createStatement();
-        ResultSet rslt = stm.executeQuery(request);
-        while (rslt.next()){
-            l1.add(new JLabel("Name : " + rslt.getString(3)));
-            l2.add(new JLabel("Salle : " + rslt.getString(2)));
-            l3.add(new JLabel("Date de péremption : " + rslt.getString(4)));
-            l4.add(new JLabel("Quantité : " + rslt.getInt(5)));
-            c1.add(l1);
-            c1.add(l2);
-            c1.add(l3);
-            c1.add(l4);
-            pscroll.add(c1);
-            window.getContentPane().add(pscroll);
-            window.setVisible(true);
-        }
+        String[] t = {"id", "salle", "nom", "péremption", "quantité"};
+        table.Table(window, co, t, request);
     }
 
     public void Insertion(JFrame window, Connection co){
@@ -131,6 +119,85 @@ public class Food {
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
+            }
+        });
+        window.setVisible(true);
+    }
+
+    JTextField u1 = new JTextField(15);
+    JTextField u2 = new JTextField(15);
+    JTextField u3 = new JTextField(15);
+    JTextField u4 = new JTextField(15);
+    JTextField u5 = new JTextField(15);
+    Box d3 = Box.createHorizontalBox();
+    Box d4 = Box.createHorizontalBox();
+    Box d5 = Box.createHorizontalBox();
+    Box d6 = Box.createHorizontalBox();
+    JComboBox up = new JComboBox();
+    JButton bupdate = new JButton("Select");
+    JButton bup = new JButton("Update");
+
+    public void Update(JFrame window, Connection co , int id) throws SQLException{
+        i=0;
+        String request = "SELECT food_id , food_name " +
+                "FROM food AS F " +
+                "LEFT JOIN room AS R " +
+                "ON R.room_id = F.food_room_id " +
+                "WHERE R.room_user_id = " + id +
+                " ORDER BY food_id ASC;";
+        Statement stm = co.createStatement();
+        ResultSet rslt = stm.executeQuery(request);
+        while(rslt.next()){
+            s = rslt.getString(2);
+            data.add(s);
+            i++;
+        }
+        up.setModel(new DefaultComboBoxModel(data.toArray()));
+        d1.add(up);
+        d2.add(bupdate);
+        f1.add(d1);
+        f1.add(d2);
+        window.getContentPane().add(f1);
+        bupdate.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String d = String.valueOf(up.getSelectedItem());
+                window.getContentPane().removeAll();
+                window.revalidate();
+                window.repaint();
+                d1.add(new JLabel("salle (id)"));
+                d1.add(u1);
+                d2.add(new JLabel("date péremption"));
+                d2.add(u2);
+                d3.add(new JLabel("quantité"));
+                d3.add(u3);
+                d4.add(new JLabel("péremption ap. ouverture"));
+                d4.add(u4);
+                d5.add(new JLabel("date ouverture"));
+                d5.add(u5);
+                d6.add(bup);
+                f1.add(d1);
+                f1.add(d2);
+                f1.add(d3);
+                f1.add(d4);
+                f1.add(d5);
+                f1.add(d6);
+                window.getContentPane().add(f1);
+                window.setVisible(true);
+                bup.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String request = "UPDATE food " +
+                                "SET food_room_id = '"+u1.getText()+"', food_perempt = '"+u2.getText()+"', food_quantity = '"+u3.getText()+"', food_perempt_open = '"+u4.getText()+"', food_open = '"+u5.getText()+"' "+
+                                "WHERE food_name = '"+d+"'";
+                        try {
+                            Statement stm = co.createStatement();
+                            stm.executeUpdate(request);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                });
             }
         });
         window.setVisible(true);
